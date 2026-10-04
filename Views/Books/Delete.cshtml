@@ -1,0 +1,47 @@
+﻿@model BookManagement.Models.Book
+
+@{
+    ViewData["Title"] = "Xóa sách";
+}
+
+<h2>Xóa sách</h2>
+
+<h4>Bạn có chắc muốn xóa sách này không?</h4>
+
+<div>
+    <p>
+        <strong>Id:</strong> @Model.Id
+    </p>
+
+    <p>
+        <strong>Tên sách:</strong> @Model.Title
+    </p>
+
+    <p>
+        <strong>Tác giả:</strong> @Model.Author
+    </p>
+
+    <p>
+        <strong>Giá:</strong>
+        @Model.Price.ToString("N0") VNĐ
+    </p>
+
+    <p>
+        <strong>Năm xuất bản:</strong>
+        @Model.PublishedYear
+    </p>
+</div>
+
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-danger">
+        Xóa
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Hủy
+    </a>
+</form>

@@ -1,0 +1,45 @@
+﻿@model BookManagement.Models.Book
+
+@{
+    ViewData["Title"] = "Chi tiết sách";
+}
+
+<h2>Chi tiết sách</h2>
+
+<div>
+    <p>
+        <strong>Id:</strong>
+        @Model.Id
+    </p>
+
+    <p>
+        <strong>Tên sách:</strong>
+        @Model.Title
+    </p>
+
+    <p>
+        <strong>Tác giả:</strong>
+        @Model.Author
+    </p>
+
+    <p>
+        <strong>Giá:</strong>
+        @Model.Price.ToString("N0") VNĐ
+    </p>
+
+    <p>
+        <strong>Năm xuất bản:</strong>
+        @Model.PublishedYear
+    </p>
+</div>
+
+<a asp-action="Edit"
+   asp-route-id="@Model.Id"
+   class="btn btn-warning">
+    Sửa
+</a>
+
+<a asp-action="Index"
+   class="btn btn-secondary">
+    Quay lại
+</a>

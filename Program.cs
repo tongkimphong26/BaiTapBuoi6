@@ -24,6 +24,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseMiddleware<BookManagement.Middlewares.RequestLoggingMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(

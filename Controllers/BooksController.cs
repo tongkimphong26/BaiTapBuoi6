@@ -77,13 +77,20 @@ namespace BookManagement.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Book book)
+        public IActionResult Edit(Book book)
         {
-            if (id != book.Id)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return View(book);
             }
 
+            return View("ConfirmEdit", book);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmEdit(Book book)
+        {
             if (ModelState.IsValid)
             {
                 _context.Update(book);
@@ -92,7 +99,7 @@ namespace BookManagement.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(book);
+            return View("ConfirmEdit", book);
         }
 
         public async Task<IActionResult> Delete(int? id)

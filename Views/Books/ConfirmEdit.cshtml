@@ -1,0 +1,55 @@
+﻿@model BookManagement.Models.Book
+
+@{
+    ViewData["Title"] = "Xác nhận sửa sách";
+}
+
+<h2>Xác nhận sửa sách</h2>
+
+<div class="alert alert-warning">
+    <h4>Bạn có chắc chắn muốn sửa thông tin sách này không?</h4>
+</div>
+
+<div class="card p-3 mb-3">
+
+    <p>
+        <strong>Tên sách:</strong>
+        @Model.Title
+    </p>
+
+    <p>
+        <strong>Tác giả:</strong>
+        @Model.Author
+    </p>
+
+    <p>
+        <strong>Giá:</strong>
+        @Model.Price.ToString("N0") VNĐ
+    </p>
+
+    <p>
+        <strong>Năm xuất bản:</strong>
+        @Model.PublishedYear
+    </p>
+
+</div>
+
+<form asp-action="ConfirmEdit" method="post">
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Title" />
+    <input type="hidden" asp-for="Author" />
+    <input type="hidden" asp-for="Price" />
+    <input type="hidden" asp-for="PublishedYear" />
+
+    <button type="submit" class="btn btn-success">
+        Xác nhận sửa
+    </button>
+
+    <a asp-action="Edit"
+       asp-route-id="@Model.Id"
+       class="btn btn-secondary">
+        Quay lại sửa
+    </a>
+
+</form>

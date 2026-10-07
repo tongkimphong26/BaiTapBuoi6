@@ -18,6 +18,7 @@
             <th>Tác giả</th>
             <th>Giá</th>
             <th>Năm xuất bản</th>
+            <th>Hình ảnh</th>
             <th>Chức năng</th>
         </tr>
     </thead>
@@ -31,7 +32,22 @@
                 <td>@book.Author</td>
                 <td>@book.Price.ToString("N0") VNĐ</td>
                 <td>@book.PublishedYear</td>
-
+                <td>
+                    @if (book.Images != null && book.Images.Any())
+                    {
+                        foreach (var image in book.Images)
+                        {
+                            <img src="@image.ImagePath"
+                                 width="100"
+                                 height="100"
+                                 style="object-fit: cover; margin: 5px;" />
+                        }
+                    }
+                    else
+                    {
+                        <span>Chưa có ảnh</span>
+                    }
+                </td>
                 <td>
                     <a asp-action="Details"
                        asp-route-id="@book.Id">

@@ -4,41 +4,64 @@
     ViewData["Title"] = "Thêm sách";
 }
 
-<h2>Thêm sách</h2>
+<h1>Thêm sách</h1>
 
-<form asp-action="Create" method="post">
+<hr />
 
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label">Tên sách</label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-controller="Books"
+              asp-action="Create"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Tên sách</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Author" class="form-label">Tác giả</label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Price" class="form-label">Giá</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PublishedYear" class="form-label">Năm xuất bản</label>
+                <input asp-for="PublishedYear" class="form-control" />
+                <span asp-validation-for="PublishedYear" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Hình ảnh sách</label>
+                <input type="file"
+                       name="imageFiles"
+                       class="form-control"
+                       accept=".jpg,.jpeg,.png"
+                       multiple />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Thêm sách
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Quay lại
+            </a>
+
+        </form>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="Author" class="form-label">Tác giả</label>
-        <input asp-for="Author" class="form-control" />
-        <span asp-validation-for="Author" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Price" class="form-label">Giá</label>
-        <input asp-for="Price" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="PublishedYear" class="form-label">
-            Năm xuất bản
-        </label>
-        <input asp-for="PublishedYear" class="form-control" />
-        <span asp-validation-for="PublishedYear" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">
-        Thêm sách
-    </button>
-
-    <a asp-action="Index" class="btn btn-secondary">
-        Quay lại
-    </a>
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

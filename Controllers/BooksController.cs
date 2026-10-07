@@ -15,7 +15,9 @@ namespace BookManagement.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var books = await _context.Books.ToListAsync();
+            var books = await _context.Books
+                .Include(b => b.Images)
+                .ToListAsync();
 
             return View(books);
         }
@@ -45,17 +47,93 @@ namespace BookManagement.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Book book)
+        public async Task<IActionResult> Create(Book book, List<IFormFile> imageFiles)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                return View(book);
+            }
+
+            try
             {
                 _context.Books.Add(book);
                 await _context.SaveChangesAsync();
 
+                if (imageFiles != null && imageFiles.Count > 0)
+                {
+                    string folderPath = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot",
+                        "images",
+                        "books"
+                    );
+
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
+
+                    foreach (var imageFile in imageFiles)
+                    {
+                        if (imageFile == null || imageFile.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        string extension = Path.GetExtension(imageFile.FileName)
+                            .ToLowerInvariant();
+
+                        if (extension != ".jpg" &&
+                            extension != ".jpeg" &&
+                            extension != ".png")
+                        {
+                            ModelState.AddModelError(
+                                "",
+                                "Chỉ được upload file JPG, JPEG hoặc PNG."
+                            );
+
+                            return View(book);
+                        }
+
+                        string fileName = Guid.NewGuid().ToString() + extension;
+
+                        string filePath = Path.Combine(
+                            folderPath,
+                            fileName
+                        );
+
+                        using (var stream = new FileStream(
+                            filePath,
+                            FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+
+                        BookImage bookImage = new BookImage
+                        {
+                            BookId = book.Id,
+                            ImagePath = "/images/books/" + fileName
+                        };
+
+                        _context.BookImages.Add(bookImage);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
 
-            return View(book);
+                ModelState.AddModelError(
+                    "",
+                    "Có lỗi xảy ra khi tải ảnh: " + ex.Message
+                );
+
+                return View(book);
+            }
         }
 
         public async Task<IActionResult> Edit(int? id)

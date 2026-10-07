@@ -48,6 +48,44 @@ namespace BaiTapBuoi6.Migrations
 
                     b.ToTable("Books");
                 });
+
+            modelBuilder.Entity("BookManagement.Models.BookImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookImages");
+                });
+
+            modelBuilder.Entity("BookManagement.Models.BookImage", b =>
+                {
+                    b.HasOne("BookManagement.Models.Book", "Book")
+                        .WithMany("Images")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("BookManagement.Models.Book", b =>
+                {
+                    b.Navigation("Images");
+                });
 #pragma warning restore 612, 618
         }
     }
